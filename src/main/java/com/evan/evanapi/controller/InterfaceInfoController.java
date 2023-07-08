@@ -10,11 +10,11 @@ import com.evan.evanapi.constant.UserConstant;
 import com.evan.evanapi.exception.BusinessException;
 import com.evan.evanapi.exception.ThrowUtils;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoAddRequest;
-import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoEditRequest;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoUpdateRequest;
 import com.evan.evanapi.model.entity.InterfaceInfo;
 import com.evan.evanapi.model.entity.User;
+import com.evan.evanapi.model.vo.InterfaceInfoVO;
 import com.evan.evanapi.service.InterfaceInfoService;
 import com.evan.evanapi.service.UserService;
 import com.google.gson.Gson;
@@ -28,9 +28,6 @@ import java.util.List;
 
 /**
  * 帖子接口
- *
- * @author <a href="https://github.com/lievan">程序员鱼皮</a>
- * @from <a href="https://evan.icu">编程导航知识星球</a>
  */
 @RestController
 @RequestMapping("/interfaceInfo")
@@ -61,15 +58,9 @@ public class InterfaceInfoController {
         }
         InterfaceInfo interfaceInfo = new InterfaceInfo();
         BeanUtils.copyProperties(interfaceInfoAddRequest, interfaceInfo);
-        List<String> tags = interfaceInfoAddRequest.getTags();
-        if (tags != null) {
-            interfaceInfo.setTags(GSON.toJson(tags));
-        }
         interfaceInfoService.validInterfaceInfo(interfaceInfo, true);
         User loginUser = userService.getLoginUser(request);
         interfaceInfo.setUserId(loginUser.getId());
-        interfaceInfo.setFavourNum(0);
-        interfaceInfo.setThumbNum(0);
         boolean result = interfaceInfoService.save(interfaceInfo);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         long newInterfaceInfoId = interfaceInfo.getId();
@@ -115,10 +106,6 @@ public class InterfaceInfoController {
         }
         InterfaceInfo interfaceInfo = new InterfaceInfo();
         BeanUtils.copyProperties(interfaceInfoUpdateRequest, interfaceInfo);
-        List<String> tags = interfaceInfoUpdateRequest.getTags();
-        if (tags != null) {
-            interfaceInfo.setTags(GSON.toJson(tags));
-        }
         // 参数校验
         interfaceInfoService.validInterfaceInfo(interfaceInfo, false);
         long id = interfaceInfoUpdateRequest.getId();
@@ -207,39 +194,6 @@ public class InterfaceInfoController {
         ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
         Page<InterfaceInfo> interfaceInfoPage = interfaceInfoService.searchFromEs(interfaceInfoQueryRequest);
         return ResultUtils.success(interfaceInfoService.getInterfaceInfoVOPage(interfaceInfoPage, request));
-    }
-
-    /**
-     * 编辑（用户）
-     *
-     * @param interfaceInfoEditRequest
-     * @param request
-     * @return
-     */
-    @PostMapping("/edit")
-    public BaseResponse<Boolean> editInterfaceInfo(@RequestBody InterfaceInfoEditRequest interfaceInfoEditRequest, HttpServletRequest request) {
-        if (interfaceInfoEditRequest == null || interfaceInfoEditRequest.getId() <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        InterfaceInfo interfaceInfo = new InterfaceInfo();
-        BeanUtils.copyProperties(interfaceInfoEditRequest, interfaceInfo);
-        List<String> tags = interfaceInfoEditRequest.getTags();
-        if (tags != null) {
-            interfaceInfo.setTags(GSON.toJson(tags));
-        }
-        // 参数校验
-        interfaceInfoService.validInterfaceInfo(interfaceInfo, false);
-        User loginUser = userService.getLoginUser(request);
-        long id = interfaceInfoEditRequest.getId();
-        // 判断是否存在
-        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
-        ThrowUtils.throwIf(oldInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
-        // 仅本人或管理员可编辑
-        if (!oldInterfaceInfo.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)) {
-            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
-        }
-        boolean result = interfaceInfoService.updateById(interfaceInfo);
-        return ResultUtils.success(result);
     }
 
 }
