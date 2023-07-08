@@ -9,5 +9,5 @@ import com.evan.evanapi.model.entity.InterfaceInfo;
 * @createDate 2023-07-07 21:30:23
 */
 public interface InterfaceInfoService extends IService<InterfaceInfo> {
-
+    void validInterfaceInfo(InterfaceInfo info, boolean add);
 }

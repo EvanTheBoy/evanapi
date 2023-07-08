@@ -1,11 +1,12 @@
 package com.evan.evanapi.model.dto.interfaceInfo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.evan.evanapi.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 查询请求
@@ -13,51 +14,49 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class InterfaceInfoQueryRequest extends PageRequest implements Serializable {
-
     /**
-     * id
+     * 主键
      */
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
-     * id
+     * 名称
      */
-    private Long notId;
+    private String name;
 
     /**
-     * 搜索词
+     * 描述
      */
-    private String searchText;
+    private String description;
 
     /**
-     * 标题
+     * 接口地址
      */
-    private String title;
+    private String url;
 
     /**
-     * 内容
+     * 请求头
      */
-    private String content;
+    private String requestHeader;
 
     /**
-     * 标签列表
+     * 响应头
      */
-    private List<String> tags;
+    private String responseHeader;
 
     /**
-     * 至少有一个标签
+     * 接口状态（0-关闭，1-开启）
      */
-    private List<String> orTags;
+    private Integer status;
 
     /**
-     * 创建用户 id
+     * 请求类型
+     */
+    private String method;
+
+    /**
+     * 创建人
      */
     private Long userId;
-
-    /**
-     * 收藏用户 id
-     */
-    private Long favourUserId;
-
-    private static final long serialVersionUID = 1L;
 }
