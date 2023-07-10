@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/interfaceInfo")
 @Slf4j
 public class InterfaceInfoController {
-
     @Resource
     private InterfaceInfoService interfaceInfoService;
 
@@ -194,5 +193,4 @@ public class InterfaceInfoController {
         Page<InterfaceInfo> interfaceInfoPage = interfaceInfoService.searchFromEs(interfaceInfoQueryRequest);
         return ResultUtils.success(interfaceInfoService.getInterfaceInfoVOPage(interfaceInfoPage, request));
     }
-
 }
