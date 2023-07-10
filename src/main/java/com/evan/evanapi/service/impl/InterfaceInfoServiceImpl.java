@@ -9,12 +9,15 @@ import com.evan.evanapi.exception.BusinessException;
 import com.evan.evanapi.exception.ThrowUtils;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoEsDTO;
-import com.evan.evanapi.model.entity.InterfaceInfo;
+import com.evan.evanapi.model.entity.*;
 import com.evan.evanapi.mapper.InterfaceInfoMapper;
 import com.evan.evanapi.model.vo.InterfaceInfoVO;
+import com.evan.evanapi.model.vo.UserVO;
 import com.evan.evanapi.service.InterfaceInfoService;
+import com.evan.evanapi.service.UserService;
 import com.evan.evanapi.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -32,9 +35,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -47,6 +48,9 @@ import java.util.stream.Collectors;
 public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, InterfaceInfo> implements InterfaceInfoService{
     @Resource
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
+
+    @Resource
+    private UserService userService;
 
     @Override
     public void validInterfaceInfo(InterfaceInfo interfaceInfo, boolean add) {
@@ -204,12 +208,81 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 
     @Override
     public InterfaceInfoVO getInterfaceInfoVO(InterfaceInfo interfaceInfo, HttpServletRequest request) {
-        return null;
+        InterfaceInfoVO interfaceInfoVO = InterfaceInfoVO.objToVo(interfaceInfo);
+        long interfaceInfoId = interfaceInfo.getId();
+        // 1. 关联查询用户信息
+        Long userId = interfaceInfo.getUserId();
+        User user = null;
+        if (userId != null && userId > 0) {
+            user = userService.getById(userId);
+        }
+        UserVO userVO = userService.getUserVO(user);
+        interfaceInfoVO.setUser(userVO);
+//        // 2. 已登录，获取用户点赞、收藏状态
+//        User loginUser = userService.getLoginUserPermitNull(request);
+//        if (loginUser != null) {
+//            // 获取点赞
+//            QueryWrapper<InterfaceInfoThumb> interfaceInfoThumbQueryWrapper = new QueryWrapper<>();
+//            interfaceInfoThumbQueryWrapper.in("interfaceInfoId", interfaceInfoId);
+//            interfaceInfoThumbQueryWrapper.eq("userId", loginUser.getId());
+//            InterfaceInfoThumb interfaceInfoThumb = interfaceInfoThumbMapper.selectOne(interfaceInfoThumbQueryWrapper);
+//            interfaceInfoVO.setHasThumb(interfaceInfoThumb != null);
+//            // 获取收藏
+//            QueryWrapper<InterfaceInfoFavour> interfaceInfoFavourQueryWrapper = new QueryWrapper<>();
+//            interfaceInfoFavourQueryWrapper.in("interfaceInfoId", interfaceInfoId);
+//            interfaceInfoFavourQueryWrapper.eq("userId", loginUser.getId());
+//            InterfaceInfoFavour interfaceInfoFavour = interfaceInfoFavourMapper.selectOne(interfaceInfoFavourQueryWrapper);
+//            interfaceInfoVO.setHasFavour(interfaceInfoFavour != null);
+//        }
+        return interfaceInfoVO;
     }
 
     @Override
     public Page<InterfaceInfoVO> getInterfaceInfoVOPage(Page<InterfaceInfo> interfaceInfoPage, HttpServletRequest request) {
-        return null;
+        List<InterfaceInfo> interfaceInfoList = interfaceInfoPage.getRecords();
+        Page<InterfaceInfoVO> interfaceInfoVOPage = new Page<>(interfaceInfoPage.getCurrent(), interfaceInfoPage.getSize(), interfaceInfoPage.getTotal());
+        if (CollectionUtils.isEmpty(interfaceInfoList)) {
+            return interfaceInfoVOPage;
+        }
+        // 1. 关联查询用户信息
+        Set<Long> userIdSet = interfaceInfoList.stream().map(InterfaceInfo::getUserId).collect(Collectors.toSet());
+        Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
+                .collect(Collectors.groupingBy(User::getId));
+//        // 2. 已登录，获取用户点赞、收藏状态
+//        Map<Long, Boolean> interfaceInfoIdHasThumbMap = new HashMap<>();
+//        Map<Long, Boolean> interfaceInfoIdHasFavourMap = new HashMap<>();
+//        User loginUser = userService.getLoginUserPermitNull(request);
+//        if (loginUser != null) {
+//            Set<Long> interfaceInfoIdSet = interfaceInfoList.stream().map(InterfaceInfo::getId).collect(Collectors.toSet());
+//            loginUser = userService.getLoginUser(request);
+//            // 获取点赞
+//            QueryWrapper<InterfaceInfoThumb> interfaceInfoThumbQueryWrapper = new QueryWrapper<>();
+//            interfaceInfoThumbQueryWrapper.in("interfaceInfoId", interfaceInfoIdSet);
+//            interfaceInfoThumbQueryWrapper.eq("userId", loginUser.getId());
+//            List<InterfaceInfoThumb> interfaceInfoInterfaceInfoThumbList = interfaceInfoThumbMapper.selectList(interfaceInfoThumbQueryWrapper);
+//            interfaceInfoInterfaceInfoThumbList.forEach(interfaceInfoInterfaceInfoThumb -> interfaceInfoIdHasThumbMap.put(interfaceInfoInterfaceInfoThumb.getInterfaceInfoId(), true));
+//            // 获取收藏
+//            QueryWrapper<InterfaceInfoFavour> interfaceInfoFavourQueryWrapper = new QueryWrapper<>();
+//            interfaceInfoFavourQueryWrapper.in("interfaceInfoId", interfaceInfoIdSet);
+//            interfaceInfoFavourQueryWrapper.eq("userId", loginUser.getId());
+//            List<InterfaceInfoFavour> interfaceInfoFavourList = interfaceInfoFavourMapper.selectList(interfaceInfoFavourQueryWrapper);
+//            interfaceInfoFavourList.forEach(interfaceInfoFavour -> interfaceInfoIdHasFavourMap.put(interfaceInfoFavour.getInterfaceInfoId(), true));
+//        }
+//        // 填充信息
+//        List<InterfaceInfoVO> interfaceInfoVOList = interfaceInfoList.stream().map(interfaceInfo -> {
+//            InterfaceInfoVO interfaceInfoVO = InterfaceInfoVO.objToVo(interfaceInfo);
+//            Long userId = interfaceInfo.getUserId();
+//            User user = null;
+//            if (userIdUserListMap.containsKey(userId)) {
+//                user = userIdUserListMap.get(userId).get(0);
+//            }
+//            interfaceInfoVO.setUser(userService.getUserVO(user));
+//            interfaceInfoVO.setHasThumb(interfaceInfoIdHasThumbMap.getOrDefault(interfaceInfo.getId(), false));
+//            interfaceInfoVO.setHasFavour(interfaceInfoIdHasFavourMap.getOrDefault(interfaceInfo.getId(), false));
+//            return interfaceInfoVO;
+//        }).collect(Collectors.toList());
+//        interfaceInfoVOPage.setRecords(interfaceInfoVOList);
+        return interfaceInfoVOPage;
     }
 }
 
