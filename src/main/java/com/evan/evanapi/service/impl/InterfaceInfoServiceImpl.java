@@ -8,16 +8,13 @@ import com.evan.evanapi.constant.CommonConstant;
 import com.evan.evanapi.exception.BusinessException;
 import com.evan.evanapi.exception.ThrowUtils;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
-import com.evan.evanapi.model.dto.InterfaceInfo.InterfaceInfoEsDTO;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoEsDTO;
 import com.evan.evanapi.model.entity.InterfaceInfo;
 import com.evan.evanapi.mapper.InterfaceInfoMapper;
-import com.evan.evanapi.model.entity.InterfaceInfo;
-import com.evan.evanapi.model.entity.InterfaceInfo;
 import com.evan.evanapi.model.vo.InterfaceInfoVO;
 import com.evan.evanapi.service.InterfaceInfoService;
 import com.evan.evanapi.utils.SqlUtils;
-import org.apache.commons.collections4.CollectionUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -26,12 +23,14 @@ import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,11 @@ import java.util.stream.Collectors;
 * @createDate 2023-07-07 21:30:23
 */
 @Service
+@Slf4j
 public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, InterfaceInfo> implements InterfaceInfoService{
+    @Resource
+    private ElasticsearchRestTemplate elasticsearchRestTemplate;
+
     @Override
     public void validInterfaceInfo(InterfaceInfo interfaceInfo, boolean add) {
         if (interfaceInfo == null) {
@@ -182,7 +185,8 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
                     .collect(Collectors.toList());
             List<InterfaceInfo> interfaceInfoList = baseMapper.selectBatchIds(interfaceInfoIdList);
             if (interfaceInfoList != null) {
-                Map<Long, List<InterfaceInfo>> idInterfaceInfoMap = interfaceInfoList.stream().collect(Collectors.groupingBy(InterfaceInfo::getId));
+                Map<Long, List<InterfaceInfo>> idInterfaceInfoMap = interfaceInfoList.stream()
+                        .collect(Collectors.groupingBy(InterfaceInfo::getId));
                 interfaceInfoIdList.forEach(interfaceInfoId -> {
                     if (idInterfaceInfoMap.containsKey(interfaceInfoId)) {
                         resourceList.add(idInterfaceInfoMap.get(interfaceInfoId).get(0));
