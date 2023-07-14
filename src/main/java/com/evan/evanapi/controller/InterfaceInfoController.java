@@ -139,7 +139,7 @@ public class InterfaceInfoController {
      * @param request
      * @return
      */
-    @GetMapping("/list/page/vo")
+    @PostMapping("/list/page/vo")
     public BaseResponse<Page<InterfaceInfoVO>> listInterfaceInfoVOByPage(@RequestBody InterfaceInfoQueryRequest interfaceInfoQueryRequest,
             HttpServletRequest request) {
         long current = interfaceInfoQueryRequest.getCurrent();
@@ -158,7 +158,7 @@ public class InterfaceInfoController {
      * @param request
      * @return
      */
-    @GetMapping("/my/list/page/vo")
+    @PostMapping("/my/list/page/vo")
     public BaseResponse<Page<InterfaceInfoVO>> listMyInterfaceInfoVOByPage(@RequestBody InterfaceInfoQueryRequest interfaceInfoQueryRequest,
             HttpServletRequest request) {
         if (interfaceInfoQueryRequest == null) {

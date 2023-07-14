@@ -268,20 +268,20 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 //            List<InterfaceInfoFavour> interfaceInfoFavourList = interfaceInfoFavourMapper.selectList(interfaceInfoFavourQueryWrapper);
 //            interfaceInfoFavourList.forEach(interfaceInfoFavour -> interfaceInfoIdHasFavourMap.put(interfaceInfoFavour.getInterfaceInfoId(), true));
 //        }
-//        // 填充信息
-//        List<InterfaceInfoVO> interfaceInfoVOList = interfaceInfoList.stream().map(interfaceInfo -> {
-//            InterfaceInfoVO interfaceInfoVO = InterfaceInfoVO.objToVo(interfaceInfo);
-//            Long userId = interfaceInfo.getUserId();
-//            User user = null;
-//            if (userIdUserListMap.containsKey(userId)) {
-//                user = userIdUserListMap.get(userId).get(0);
-//            }
-//            interfaceInfoVO.setUser(userService.getUserVO(user));
+        // 填充信息
+        List<InterfaceInfoVO> interfaceInfoVOList = interfaceInfoList.stream().map(interfaceInfo -> {
+            InterfaceInfoVO interfaceInfoVO = InterfaceInfoVO.objToVo(interfaceInfo);
+            Long userId = interfaceInfo.getUserId();
+            User user = null;
+            if (userIdUserListMap.containsKey(userId)) {
+                user = userIdUserListMap.get(userId).get(0);
+            }
+            interfaceInfoVO.setUser(userService.getUserVO(user));
 //            interfaceInfoVO.setHasThumb(interfaceInfoIdHasThumbMap.getOrDefault(interfaceInfo.getId(), false));
 //            interfaceInfoVO.setHasFavour(interfaceInfoIdHasFavourMap.getOrDefault(interfaceInfo.getId(), false));
-//            return interfaceInfoVO;
-//        }).collect(Collectors.toList());
-//        interfaceInfoVOPage.setRecords(interfaceInfoVOList);
+            return interfaceInfoVO;
+        }).collect(Collectors.toList());
+        interfaceInfoVOPage.setRecords(interfaceInfoVOList);
         return interfaceInfoVOPage;
     }
 }
