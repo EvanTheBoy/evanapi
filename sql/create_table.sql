@@ -1,6 +1,4 @@
 # 数据库初始化
-# @author <a href="https://github.com/lievan">程序员鱼皮</a>
-# @from <a href="https://evan.icu">编程导航知识星球</a>
 
 -- 创建库
 create database if not exists evanapi;
@@ -12,13 +10,15 @@ use evanapi;
 create table if not exists user
 (
     id           bigint auto_increment comment 'id' primary key,
-    userAccount  varchar(256)                           not null comment '账号',
-    userPassword varchar(512)                           not null comment '密码',
-    unionId      varchar(256)                           null comment '微信开放平台id',
-    mpOpenId     varchar(256)                           null comment '公众号openId',
-    userName     varchar(256)                           null comment '用户昵称',
-    userAvatar   varchar(1024)                          null comment '用户头像',
-    userProfile  varchar(512)                           null comment '用户简介',
+    userAccount  varchar(256)  not null comment '账号',
+    userPassword varchar(512)  not null comment '密码',
+    accessKey    varchar(512)  not null comment 'accessKey',
+    secretKey    varchar(512)  not null comment 'secretKey',
+    unionId      varchar(256)  null comment '微信开放平台id',
+    mpOpenId     varchar(256)  null comment '公众号openId',
+    userName     varchar(256)  null comment '用户昵称',
+    userAvatar   varchar(1024) null comment '用户头像',
+    userProfile  varchar(512)  null comment '用户简介',
     userRole     varchar(256) default 'user'            not null comment '用户角色：user/admin/ban',
     createTime   datetime     default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime   datetime     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
