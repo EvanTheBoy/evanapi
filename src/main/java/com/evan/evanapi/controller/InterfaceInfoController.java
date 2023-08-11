@@ -2,16 +2,13 @@ package com.evan.evanapi.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.evan.evanapi.annotation.AuthCheck;
-import com.evan.evanapi.common.BaseResponse;
-import com.evan.evanapi.common.DeleteRequest;
-import com.evan.evanapi.common.ErrorCode;
-import com.evan.evanapi.common.ResultUtils;
+import com.evan.evanapi.common.*;
 import com.evan.evanapi.constant.UserConstant;
 import com.evan.evanapi.exception.BusinessException;
 import com.evan.evanapi.exception.ThrowUtils;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoAddRequest;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
-import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoUpdateRequest;
+import com.evan.evanapi.common.IdRequest;
 import com.evan.evanapi.model.entity.InterfaceInfo;
 import com.evan.evanapi.model.entity.User;
 import com.evan.evanapi.model.vo.InterfaceInfoVO;
@@ -98,7 +95,7 @@ public class InterfaceInfoController {
      */
     @PostMapping("/update")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> updateInterfaceInfo(@RequestBody InterfaceInfoUpdateRequest interfaceInfoUpdateRequest) {
+    public BaseResponse<Boolean> updateInterfaceInfo(@RequestBody IdRequest interfaceInfoUpdateRequest) {
         if (interfaceInfoUpdateRequest == null || interfaceInfoUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -107,6 +104,58 @@ public class InterfaceInfoController {
         // 参数校验
         interfaceInfoService.validInterfaceInfo(interfaceInfo, false);
         long id = interfaceInfoUpdateRequest.getId();
+        // 判断是否存在
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        ThrowUtils.throwIf(oldInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
+        boolean result = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 上线（仅管理员）
+     *
+     * @param idRequest
+     * @return
+     */
+    @PostMapping("/online")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> onlineInterfaceInfo(@RequestBody IdRequest idRequest) {
+        // 判断用户id是否合法
+        if (idRequest == null || idRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 判断用户是否存在
+        long id = idRequest.getId();
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        ThrowUtils.throwIf(oldInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
+
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        BeanUtils.copyProperties(idRequest, interfaceInfo);
+        // 参数校验
+        interfaceInfoService.validInterfaceInfo(interfaceInfo, false);
+
+
+        boolean result = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 下线（仅管理员）
+     *
+     * @param idRequest
+     * @return
+     */
+    @PostMapping("/offline")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> offlineInterfaceInfo(@RequestBody IdRequest idRequest) {
+        if (idRequest == null || idRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        BeanUtils.copyProperties(idRequest, interfaceInfo);
+        // 参数校验
+        interfaceInfoService.validInterfaceInfo(interfaceInfo, false);
+        long id = idRequest.getId();
         // 判断是否存在
         InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
         ThrowUtils.throwIf(oldInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
