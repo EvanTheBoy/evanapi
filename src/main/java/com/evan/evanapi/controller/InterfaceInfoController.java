@@ -1,5 +1,6 @@
 package com.evan.evanapi.controller;
 
+import com.alibaba.excel.util.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.evan.evanapi.annotation.AuthCheck;
 import com.evan.evanapi.common.*;
@@ -14,6 +15,7 @@ import com.evan.evanapi.model.entity.User;
 import com.evan.evanapi.model.vo.InterfaceInfoVO;
 import com.evan.evanapi.service.InterfaceInfoService;
 import com.evan.evanapi.service.UserService;
+import com.evan.evanapiclientsdkv2.client.EvanApiClient;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -34,6 +36,9 @@ public class InterfaceInfoController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private EvanApiClient evanApiClient;
 
     private final static Gson GSON = new Gson();
 
@@ -126,8 +131,14 @@ public class InterfaceInfoController {
         }
         // 判断用户是否存在
         long id = idRequest.getId();
+        // 根据id从数据库中查找
         InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
         ThrowUtils.throwIf(oldInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
+        // 判断接口是否可以被正常调用
+        com.evan.evanapiclientsdkv2.model.User cUser = new com.evan.evanapiclientsdkv2.model.User();
+        cUser.setUsername("evan");
+        String username = evanApiClient.getUsernameByPost(cUser);
+        ThrowUtils.throwIf(StringUtils.isBlank(username), ErrorCode.SYSTEM_ERROR, "接口调用异常");
 
         InterfaceInfo interfaceInfo = new InterfaceInfo();
         BeanUtils.copyProperties(idRequest, interfaceInfo);
