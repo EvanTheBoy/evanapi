@@ -12,6 +12,7 @@ import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.evan.evanapi.common.IdRequest;
 import com.evan.evanapi.model.entity.InterfaceInfo;
 import com.evan.evanapi.model.entity.User;
+import com.evan.evanapi.model.enums.InterfaceInfoStatusEnum;
 import com.evan.evanapi.model.vo.InterfaceInfoVO;
 import com.evan.evanapi.service.InterfaceInfoService;
 import com.evan.evanapi.service.UserService;
@@ -139,13 +140,10 @@ public class InterfaceInfoController {
         cUser.setUsername("evan");
         String username = evanApiClient.getUsernameByPost(cUser);
         ThrowUtils.throwIf(StringUtils.isBlank(username), ErrorCode.SYSTEM_ERROR, "接口调用异常");
-
+        // 更新接口信息
         InterfaceInfo interfaceInfo = new InterfaceInfo();
-        BeanUtils.copyProperties(idRequest, interfaceInfo);
-        // 参数校验
-        interfaceInfoService.validInterfaceInfo(interfaceInfo, false);
-
-
+        interfaceInfo.setId(id);
+        interfaceInfo.setStatus(InterfaceInfoStatusEnum.ONLINE.getValue());
         boolean result = interfaceInfoService.updateById(interfaceInfo);
         return ResultUtils.success(result);
     }
@@ -159,17 +157,19 @@ public class InterfaceInfoController {
     @PostMapping("/offline")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> offlineInterfaceInfo(@RequestBody IdRequest idRequest) {
+        // 判断用户id是否合法
         if (idRequest == null || idRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        InterfaceInfo interfaceInfo = new InterfaceInfo();
-        BeanUtils.copyProperties(idRequest, interfaceInfo);
-        // 参数校验
-        interfaceInfoService.validInterfaceInfo(interfaceInfo, false);
+        // 判断用户是否存在
         long id = idRequest.getId();
-        // 判断是否存在
+        // 根据id从数据库中查找
         InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
         ThrowUtils.throwIf(oldInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
+        // 更新接口信息
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        interfaceInfo.setId(id);
+        interfaceInfo.setStatus(InterfaceInfoStatusEnum.OFFLINE.getValue());
         boolean result = interfaceInfoService.updateById(interfaceInfo);
         return ResultUtils.success(result);
     }
