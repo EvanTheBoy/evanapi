@@ -13,6 +13,10 @@ public class UserRegisterRequest implements Serializable {
 
     private String userAccount;
 
+    private String accessKey;
+
+    private String secretKey;
+
     private String userPassword;
 
     private String checkPassword;
