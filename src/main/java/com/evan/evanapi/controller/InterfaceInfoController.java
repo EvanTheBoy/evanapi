@@ -8,6 +8,7 @@ import com.evan.evanapi.constant.UserConstant;
 import com.evan.evanapi.exception.BusinessException;
 import com.evan.evanapi.exception.ThrowUtils;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoAddRequest;
+import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoInvokeRequest;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.evan.evanapi.common.IdRequest;
 import com.evan.evanapi.model.entity.InterfaceInfo;
@@ -19,6 +20,7 @@ import com.evan.evanapi.service.UserService;
 import com.evan.evanapiclientsdkv2.client.EvanApiClient;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -172,6 +174,40 @@ public class InterfaceInfoController {
         interfaceInfo.setStatus(InterfaceInfoStatusEnum.OFFLINE.getValue());
         boolean result = interfaceInfoService.updateById(interfaceInfo);
         return ResultUtils.success(result);
+    }
+
+    /**
+     * 测试调用
+     *
+     * @param interfaceInfoInvokeRequest
+     * @return
+     */
+    @PostMapping("/invoke")
+    public BaseResponse<Object> invokeInterfaceInfo(@RequestBody InterfaceInfoInvokeRequest interfaceInfoInvokeRequest
+            , HttpServletRequest request) {
+        // 判断用户id是否合法
+        if (interfaceInfoInvokeRequest == null || interfaceInfoInvokeRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 判断用户是否存在
+        long id = interfaceInfoInvokeRequest.getId();
+        // 根据id从数据库中查找并校验其相关信息
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        ThrowUtils.throwIf(oldInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
+        ThrowUtils.throwIf(oldInterfaceInfo.getStatus() != InterfaceInfoStatusEnum.ONLINE.getValue(),
+                ErrorCode.PARAMS_ERROR, "接口已关闭");
+        // 获取用户的请求参数
+        String userParams = interfaceInfoInvokeRequest.getUserRequestParams();
+        // 获取登录用户的两个key
+        User loginUser = userService.getLoginUser(request);
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        EvanApiClient tempClient = new EvanApiClient(accessKey, secretKey);
+        // 将用户的请求参数映射成json数据
+        Gson gson = new Gson();
+        com.evan.evanapiclientsdkv2.model.User user = gson.fromJson(userParams, com.evan.evanapiclientsdkv2.model.User.class);
+        String username = tempClient.getUsernameByPost(user);
+        return ResultUtils.success(username);
     }
 
     /**
