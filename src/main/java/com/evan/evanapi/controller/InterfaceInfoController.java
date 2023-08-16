@@ -204,8 +204,7 @@ public class InterfaceInfoController {
         String secretKey = loginUser.getSecretKey();
         EvanApiClient tempClient = new EvanApiClient(accessKey, secretKey);
         // 将用户的请求参数映射成json数据
-        Gson gson = new Gson();
-        com.evan.evanapiclientsdkv2.model.User user = gson.fromJson(userParams, com.evan.evanapiclientsdkv2.model.User.class);
+        com.evan.evanapiclientsdkv2.model.User user = GSON.fromJson(userParams, com.evan.evanapiclientsdkv2.model.User.class);
         String username = tempClient.getUsernameByPost(user);
         return ResultUtils.success(username);
     }
