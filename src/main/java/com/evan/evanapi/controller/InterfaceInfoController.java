@@ -11,6 +11,7 @@ import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoAddRequest;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoInvokeRequest;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.evan.evanapi.common.IdRequest;
+import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoUpdateRequest;
 import com.evan.evanapi.model.entity.InterfaceInfo;
 import com.evan.evanapi.model.entity.User;
 import com.evan.evanapi.model.enums.InterfaceInfoStatusEnum;
@@ -103,7 +104,7 @@ public class InterfaceInfoController {
      */
     @PostMapping("/update")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> updateInterfaceInfo(@RequestBody IdRequest interfaceInfoUpdateRequest) {
+    public BaseResponse<Boolean> updateInterfaceInfo(@RequestBody InterfaceInfoUpdateRequest interfaceInfoUpdateRequest) {
         if (interfaceInfoUpdateRequest == null || interfaceInfoUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
