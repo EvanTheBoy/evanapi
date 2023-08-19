@@ -1,6 +1,5 @@
 package com.evan.evanapi.controller;
 
-import com.alibaba.excel.util.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.evan.evanapi.annotation.AuthCheck;
 import com.evan.evanapi.common.*;
@@ -9,17 +8,12 @@ import com.evan.evanapi.exception.BusinessException;
 import com.evan.evanapi.exception.ThrowUtils;
 import com.evan.evanapi.model.dto.userInterfaceInfo.UserInterfaceInfoQueryRequest;
 import com.evan.evanapi.model.dto.userInterfaceInfo.UserInterfaceInfoAddRequest;
-import com.evan.evanapi.model.dto.userInterfaceInfo.UserInterfaceInfoInvokeRequest;
-import com.evan.evanapi.model.dto.userInterfaceInfo.UserInterfaceInfoQueryRequest;
 import com.evan.evanapi.model.dto.userInterfaceInfo.UserInterfaceInfoUpdateRequest;
 import com.evan.evanapi.model.entity.UserInterfaceInfo;
-import com.evan.evanapi.model.entity.UserInterfaceInfo;
 import com.evan.evanapi.model.entity.User;
-import com.evan.evanapi.model.enums.UserInterfaceInfoStatusEnum;
 import com.evan.evanapi.model.vo.UserInterfaceInfoVO;
 import com.evan.evanapi.service.UserInterfaceInfoService;
 import com.evan.evanapi.service.UserService;
-import com.evan.evanapiclientsdkv2.client.EvanApiClient;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -34,15 +28,12 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/userInterfaceInfo")
 @Slf4j
-public class UserUserInterfaceInfoController {
+public class UserInterfaceInfoController {
     @Resource
     private UserInterfaceInfoService userInterfaceInfoService;
 
     @Resource
     private UserService userService;
-
-    @Resource
-    private EvanApiClient evanApiClient;
 
     private final static Gson GSON = new Gson();
 
@@ -118,96 +109,6 @@ public class UserUserInterfaceInfoController {
         ThrowUtils.throwIf(oldUserInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
         boolean result = userInterfaceInfoService.updateById(userInterfaceInfo);
         return ResultUtils.success(result);
-    }
-
-    /**
-     * 上线（仅管理员）
-     *
-     * @param idRequest
-     * @return
-     */
-    @PostMapping("/online")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> onlineUserInterfaceInfo(@RequestBody IdRequest idRequest) {
-        // 判断用户id是否合法
-        if (idRequest == null || idRequest.getId() <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        // 判断用户是否存在
-        long id = idRequest.getId();
-        // 根据id从数据库中查找
-        UserInterfaceInfo oldUserInterfaceInfo = userInterfaceInfoService.getById(id);
-        ThrowUtils.throwIf(oldUserInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
-        // 判断接口是否可以被正常调用
-        com.evan.evanapiclientsdkv2.model.User cUser = new com.evan.evanapiclientsdkv2.model.User();
-        cUser.setUsername("evan");
-        String username = evanApiClient.getUsernameByPost(cUser);
-        ThrowUtils.throwIf(StringUtils.isBlank(username), ErrorCode.SYSTEM_ERROR, "接口调用异常");
-        // 更新接口信息
-        UserInterfaceInfo userInterfaceInfo = new UserInterfaceInfo();
-        userInterfaceInfo.setId(id);
-        userInterfaceInfo.setStatus(UserInterfaceInfoStatusEnum.ONLINE.getValue());
-        boolean result = userInterfaceInfoService.updateById(userInterfaceInfo);
-        return ResultUtils.success(result);
-    }
-
-    /**
-     * 下线（仅管理员）
-     *
-     * @param idRequest
-     * @return
-     */
-    @PostMapping("/offline")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> offlineUserInterfaceInfo(@RequestBody IdRequest idRequest) {
-        // 判断用户id是否合法
-        if (idRequest == null || idRequest.getId() <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        // 判断用户是否存在
-        long id = idRequest.getId();
-        // 根据id从数据库中查找
-        UserInterfaceInfo oldUserInterfaceInfo = userInterfaceInfoService.getById(id);
-        ThrowUtils.throwIf(oldUserInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
-        // 更新接口信息
-        UserInterfaceInfo userInterfaceInfo = new UserInterfaceInfo();
-        userInterfaceInfo.setId(id);
-        userInterfaceInfo.setStatus(UserInterfaceInfoStatusEnum.OFFLINE.getValue());
-        boolean result = userInterfaceInfoService.updateById(userInterfaceInfo);
-        return ResultUtils.success(result);
-    }
-
-    /**
-     * 测试调用
-     *
-     * @param userInterfaceInfoInvokeRequest
-     * @return
-     */
-    @PostMapping("/invoke")
-    public BaseResponse<Object> invokeUserInterfaceInfo(@RequestBody UserInterfaceInfoInvokeRequest userInterfaceInfoInvokeRequest
-            , HttpServletRequest request) {
-        // 判断用户id是否合法
-        if (userInterfaceInfoInvokeRequest == null || userInterfaceInfoInvokeRequest.getId() <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        // 判断用户是否存在
-        long id = userInterfaceInfoInvokeRequest.getId();
-        // 根据id从数据库中查找并校验其相关信息
-        UserInterfaceInfo oldUserInterfaceInfo = userInterfaceInfoService.getById(id);
-        ThrowUtils.throwIf(oldUserInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
-        ThrowUtils.throwIf(oldUserInterfaceInfo.getStatus() != UserInterfaceInfoStatusEnum.ONLINE.getValue(),
-                ErrorCode.PARAMS_ERROR, "接口已关闭");
-        // 获取用户的请求参数
-        String userParams = userInterfaceInfoInvokeRequest.getUserRequestParams();
-        // 获取登录用户的两个key
-        User loginUser = userService.getLoginUser(request);
-        String accessKey = loginUser.getAccessKey();
-        String secretKey = loginUser.getSecretKey();
-        EvanApiClient tempClient = new EvanApiClient(accessKey, secretKey);
-        // 将用户的请求参数映射成json数据
-        com.evan.evanapiclientsdkv2.model.User user = GSON.fromJson(userParams, com.evan.evanapiclientsdkv2.model.User.class);
-        String username = tempClient.getUsernameByPost(user);
-        return ResultUtils.success(username);
     }
 
     /**

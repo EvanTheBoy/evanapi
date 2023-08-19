@@ -1,6 +1,6 @@
 package com.evan.evanapi.model.vo;
 
-import com.evan.evanapi.model.entity.InterfaceInfo;
+import com.evan.evanapi.model.entity.UserInterfaceInfo;
 import com.google.gson.Gson;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
@@ -55,30 +55,30 @@ public class UserInterfaceInfoVO implements Serializable {
     /**
      * 包装类转对象
      *
-     * @param interfaceInfoVO
+     * @param userInterfaceInfoVO
      * @return
      */
-    public static InterfaceInfo voToObj(UserInterfaceInfoVO interfaceInfoVO) {
-        if (interfaceInfoVO == null) {
+    public static UserInterfaceInfo voToObj(UserInterfaceInfoVO userInterfaceInfoVO) {
+        if (userInterfaceInfoVO == null) {
             return null;
         }
-        InterfaceInfo interfaceInfo = new InterfaceInfo();
-        BeanUtils.copyProperties(interfaceInfoVO, interfaceInfo);
-        return interfaceInfo;
+        UserInterfaceInfo userInterfaceInfo = new UserInterfaceInfo();
+        BeanUtils.copyProperties(userInterfaceInfoVO, userInterfaceInfo);
+        return userInterfaceInfo;
     }
 
     /**
      * 对象转包装类
      *
-     * @param interfaceInfo
+     * @param userInterfaceInfo
      * @return
      */
-    public static UserInterfaceInfoVO objToVo(InterfaceInfo interfaceInfo) {
-        if (interfaceInfo == null) {
+    public static UserInterfaceInfoVO objToVo(UserInterfaceInfo userInterfaceInfo) {
+        if (userInterfaceInfo == null) {
             return null;
         }
-        UserInterfaceInfoVO interfaceInfoVO = new UserInterfaceInfoVO();
-        BeanUtils.copyProperties(interfaceInfo, interfaceInfoVO);
-        return interfaceInfoVO;
+        UserInterfaceInfoVO userInterfaceInfoVO = new UserInterfaceInfoVO();
+        BeanUtils.copyProperties(userInterfaceInfo, userInterfaceInfoVO);
+        return userInterfaceInfoVO;
     }
 }
