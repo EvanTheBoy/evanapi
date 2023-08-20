@@ -1,6 +1,7 @@
 package com.evan.evanapi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.evan.evanapi.common.ErrorCode;
@@ -54,6 +55,18 @@ public class UserInterfaceInfoServiceImpl extends ServiceImpl<UserInterfaceInfoM
         }
         // 有参数则校验
         ThrowUtils.throwIf(userInterfaceInfo.getLeftNum() < 0, ErrorCode.PARAMS_ERROR, "剩余调用次数不能小于0");
+    }
+
+    @Override
+    public boolean invokeCount(long interfaceInfoId, long userId) {
+        // 判断
+        ThrowUtils.throwIf(interfaceInfoId <= 0 || userId <= 0, ErrorCode.PARAMS_ERROR);
+        UpdateWrapper<UserInterfaceInfo> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("interfaceInfoId", interfaceInfoId);
+        updateWrapper.eq("userId", userId);
+        updateWrapper.gt("leftNum", 0); // leftNum要大于0
+        updateWrapper.setSql("leftNum = leftNum - 1, totalNum = totalNum + 1");
+        return this.update(updateWrapper);
     }
 
     @Override

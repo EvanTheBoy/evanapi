@@ -47,6 +47,7 @@ public class UserInterfaceInfoController {
      * @return
      */
     @PostMapping("/add")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> addUserInterfaceInfo(@RequestBody UserInterfaceInfoAddRequest userInterfaceInfoAddRequest, HttpServletRequest request) {
         if (userInterfaceInfoAddRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -70,6 +71,7 @@ public class UserInterfaceInfoController {
      * @return
      */
     @PostMapping("/delete")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> deleteUserInterfaceInfo(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -118,6 +120,7 @@ public class UserInterfaceInfoController {
      * @return
      */
     @GetMapping("/get/vo")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<UserInterfaceInfoVO> getUserInterfaceInfoVOById(long id, HttpServletRequest request) {
         if (id <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -137,6 +140,7 @@ public class UserInterfaceInfoController {
      * @return
      */
     @PostMapping("/list/page/vo")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<UserInterfaceInfoVO>> listUserInterfaceInfoVOByPage(@RequestBody UserInterfaceInfoQueryRequest userInterfaceInfoQueryRequest,
             HttpServletRequest request) {
         long current = userInterfaceInfoQueryRequest.getCurrent();
@@ -156,6 +160,7 @@ public class UserInterfaceInfoController {
      * @return
      */
     @PostMapping("/my/list/page/vo")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<UserInterfaceInfoVO>> listMyUserInterfaceInfoVOByPage(@RequestBody UserInterfaceInfoQueryRequest userInterfaceInfoQueryRequest,
             HttpServletRequest request) {
         if (userInterfaceInfoQueryRequest == null) {
@@ -181,6 +186,7 @@ public class UserInterfaceInfoController {
      * @return
      */
     @PostMapping("/search/page/vo")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<UserInterfaceInfoVO>> searchUserInterfaceInfoVOByPage(@RequestBody UserInterfaceInfoQueryRequest userInterfaceInfoQueryRequest,
             HttpServletRequest request) {
         long size = userInterfaceInfoQueryRequest.getPageSize();

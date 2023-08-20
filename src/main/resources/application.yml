@@ -1,5 +1,7 @@
 # 公共配置文件
 spring:
+  main:
+    allow-circular-references: true
   application:
     name: evanapi
   # 默认 dev 环境
