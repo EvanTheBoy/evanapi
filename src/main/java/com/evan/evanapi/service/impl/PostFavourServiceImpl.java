@@ -10,7 +10,6 @@ import com.evan.evanapi.exception.BusinessException;
 import com.evan.evanapi.mapper.PostFavourMapper;
 import com.evan.evanapi.model.entity.Post;
 import com.evan.evanapi.model.entity.PostFavour;
-import com.evan.evanapi.model.entity.User;
 import com.evan.evanapi.service.PostFavourService;
 import com.evan.evanapi.service.PostService;
 import javax.annotation.Resource;

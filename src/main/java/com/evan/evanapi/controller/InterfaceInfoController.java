@@ -13,7 +13,6 @@ import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.evan.evanapi.common.IdRequest;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoUpdateRequest;
 import com.evan.evanapi.model.entity.InterfaceInfo;
-import com.evan.evanapi.model.entity.User;
 import com.evan.evanapi.model.enums.InterfaceInfoStatusEnum;
 import com.evan.evanapi.model.vo.InterfaceInfoVO;
 import com.evan.evanapi.service.InterfaceInfoService;
@@ -21,7 +20,6 @@ import com.evan.evanapi.service.UserService;
 import com.evan.evanapiclientsdkv2.client.EvanApiClient;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 

@@ -16,12 +16,12 @@ import com.evan.evanapi.model.dto.post.PostQueryRequest;
 import com.evan.evanapi.model.entity.Post;
 import com.evan.evanapi.model.entity.PostFavour;
 import com.evan.evanapi.model.entity.PostThumb;
-import com.evan.evanapi.model.entity.User;
 import com.evan.evanapi.model.vo.PostVO;
 import com.evan.evanapi.model.vo.UserVO;
 import com.evan.evanapi.service.PostService;
 import com.evan.evanapi.service.UserService;
 import com.evan.evanapi.utils.SqlUtils;
+import com.evan.evanapicommon.model.entity.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,9 +49,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * 帖子服务实现
- *
- * @author <a href="https://github.com/lievan">程序员鱼皮</a>
- * @from <a href="https://evan.icu">编程导航知识星球</a>
  */
 @Service
 @Slf4j

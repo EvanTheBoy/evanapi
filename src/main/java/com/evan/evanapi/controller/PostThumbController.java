@@ -5,9 +5,9 @@ import com.evan.evanapi.common.ErrorCode;
 import com.evan.evanapi.common.ResultUtils;
 import com.evan.evanapi.exception.BusinessException;
 import com.evan.evanapi.model.dto.postthumb.PostThumbAddRequest;
-import com.evan.evanapi.model.entity.User;
 import com.evan.evanapi.service.PostThumbService;
 import com.evan.evanapi.service.UserService;
+import com.evan.evanapicommon.model.entity.User;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 帖子点赞接口
- *
- * @author <a href="https://github.com/lievan">程序员鱼皮</a>
- * @from <a href="https://evan.icu">编程导航知识星球</a>
  */
 @RestController
 @RequestMapping("/post_thumb")

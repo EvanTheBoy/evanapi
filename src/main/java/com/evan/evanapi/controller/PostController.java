@@ -15,7 +15,7 @@ import com.evan.evanapi.model.dto.post.PostEditRequest;
 import com.evan.evanapi.model.dto.post.PostQueryRequest;
 import com.evan.evanapi.model.dto.post.PostUpdateRequest;
 import com.evan.evanapi.model.entity.Post;
-import com.evan.evanapi.model.entity.User;
+import com.evan.evanapicommon.model.entity.User;
 import com.evan.evanapi.model.vo.PostVO;
 import com.evan.evanapi.service.PostService;
 import com.evan.evanapi.service.UserService;

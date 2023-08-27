@@ -7,7 +7,7 @@ import com.evan.evanapi.exception.BusinessException;
 import com.evan.evanapi.mapper.PostThumbMapper;
 import com.evan.evanapi.model.entity.Post;
 import com.evan.evanapi.model.entity.PostThumb;
-import com.evan.evanapi.model.entity.User;
+import com.evan.evanapicommon.model.entity.User;
 import com.evan.evanapi.service.PostService;
 import com.evan.evanapi.service.PostThumbService;
 import javax.annotation.Resource;

@@ -3,7 +3,7 @@ package com.evan.evanapi.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.evan.evanapi.model.entity.Post;
-import com.evan.evanapi.model.entity.User;
+
 import javax.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

@@ -1,6 +1,6 @@
 package com.evan.evanapi.service;
 
-import com.evan.evanapi.model.entity.User;
+import com.evan.evanapicommon.model.entity.User;
 import javax.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,9 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 /**
  * 帖子点赞服务测试
- *
- * @author <a href="https://github.com/lievan">程序员鱼皮</a>
- * @from <a href="https://evan.icu">编程导航知识星球</a>
  */
 @SpringBootTest
 class PostThumbServiceTest {

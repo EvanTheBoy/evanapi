@@ -8,7 +8,6 @@ import com.evan.evanapi.constant.FileConstant;
 import com.evan.evanapi.exception.BusinessException;
 import com.evan.evanapi.manager.CosManager;
 import com.evan.evanapi.model.dto.file.UploadFileRequest;
-import com.evan.evanapi.model.entity.User;
 import com.evan.evanapi.model.enums.FileUploadBizEnum;
 import com.evan.evanapi.service.UserService;
 import java.io.File;

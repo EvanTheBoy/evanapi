@@ -3,7 +3,6 @@ package com.evan.evanapi.aop;
 import com.evan.evanapi.annotation.AuthCheck;
 import com.evan.evanapi.common.ErrorCode;
 import com.evan.evanapi.exception.BusinessException;
-import com.evan.evanapi.model.entity.User;
 import com.evan.evanapi.model.enums.UserRoleEnum;
 import com.evan.evanapi.service.UserService;
 import javax.annotation.Resource;

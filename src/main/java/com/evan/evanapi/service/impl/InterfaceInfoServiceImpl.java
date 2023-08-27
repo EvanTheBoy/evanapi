@@ -10,6 +10,7 @@ import com.evan.evanapi.exception.ThrowUtils;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoEsDTO;
 import com.evan.evanapi.model.entity.*;
+import com.evan.evanapicommon.model.entity.User;
 import com.evan.evanapi.mapper.InterfaceInfoMapper;
 import com.evan.evanapi.model.vo.InterfaceInfoVO;
 import com.evan.evanapi.model.vo.UserVO;

@@ -7,7 +7,6 @@ import com.evan.evanapi.exception.BusinessException;
 import com.evan.evanapi.exception.ThrowUtils;
 import com.evan.evanapi.model.dto.userInterfaceInfo.UserInterfaceInfoAddRequest;
 import com.evan.evanapi.model.dto.userInterfaceInfo.UserInterfaceInfoUpdateRequest;
-import com.evan.evanapi.model.entity.User;
 import com.evan.evanapi.service.UserInterfaceInfoService;
 import com.evan.evanapi.service.UserService;
 import com.evan.evanapicommon.model.entity.UserInterfaceInfo;

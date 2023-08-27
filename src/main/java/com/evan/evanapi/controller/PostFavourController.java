@@ -10,7 +10,6 @@ import com.evan.evanapi.model.dto.post.PostQueryRequest;
 import com.evan.evanapi.model.dto.postfavour.PostFavourAddRequest;
 import com.evan.evanapi.model.dto.postfavour.PostFavourQueryRequest;
 import com.evan.evanapi.model.entity.Post;
-import com.evan.evanapi.model.entity.User;
 import com.evan.evanapi.model.vo.PostVO;
 import com.evan.evanapi.service.PostFavourService;
 import com.evan.evanapi.service.PostService;
