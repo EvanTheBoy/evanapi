@@ -10,6 +10,7 @@ import com.evan.evanapi.manager.CosManager;
 import com.evan.evanapi.model.dto.file.UploadFileRequest;
 import com.evan.evanapi.model.enums.FileUploadBizEnum;
 import com.evan.evanapi.service.UserService;
+import com.evan.evanapicommon.model.entity.User;
 import java.io.File;
 import java.util.Arrays;
 import javax.annotation.Resource;
@@ -24,9 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文件接口
- *
- * @author <a href="https://github.com/lievan">程序员鱼皮</a>
- * @from <a href="https://evan.icu">编程导航知识星球</a>
  */
 @RestController
 @RequestMapping("/file")

@@ -1,7 +1,7 @@
 package com.evan.evanapi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.evan.evanapi.model.entity.InterfaceInfo;
+import com.evan.evanapicommon.model.entity.InterfaceInfo;
 
 /**
 * @author EvanTheBoy

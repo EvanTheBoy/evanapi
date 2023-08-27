@@ -10,6 +10,7 @@ import com.evan.evanapi.model.dto.userInterfaceInfo.UserInterfaceInfoUpdateReque
 import com.evan.evanapi.service.UserInterfaceInfoService;
 import com.evan.evanapi.service.UserService;
 import com.evan.evanapicommon.model.entity.UserInterfaceInfo;
+import com.evan.evanapicommon.model.entity.User;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;

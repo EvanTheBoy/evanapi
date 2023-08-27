@@ -3,8 +3,8 @@ package com.evan.evanapi.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.evan.evanapicommon.model.entity.InterfaceInfo;
 import com.evan.evanapi.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
-import com.evan.evanapi.model.entity.InterfaceInfo;
 import com.evan.evanapi.model.vo.InterfaceInfoVO;
 import javax.servlet.http.HttpServletRequest;
 

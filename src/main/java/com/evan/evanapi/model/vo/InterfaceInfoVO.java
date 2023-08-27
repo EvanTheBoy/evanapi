@@ -2,7 +2,7 @@ package com.evan.evanapi.model.vo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.evan.evanapi.model.entity.InterfaceInfo;
+import com.evan.evanapicommon.model.entity.InterfaceInfo;
 import com.google.gson.Gson;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;

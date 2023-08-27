@@ -12,6 +12,7 @@ import com.evan.evanapi.model.entity.Post;
 import com.evan.evanapi.model.entity.PostFavour;
 import com.evan.evanapi.service.PostFavourService;
 import com.evan.evanapi.service.PostService;
+import com.evan.evanapicommon.model.entity.User;
 import javax.annotation.Resource;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 帖子收藏服务实现
- *
- * @author <a href="https://github.com/lievan">程序员鱼皮</a>
- * @from <a href="https://evan.icu">编程导航知识星球</a>
  */
 @Service
 public class PostFavourServiceImpl extends ServiceImpl<PostFavourMapper, PostFavour>

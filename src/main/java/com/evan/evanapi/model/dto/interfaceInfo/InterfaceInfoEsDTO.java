@@ -1,7 +1,6 @@
 package com.evan.evanapi.model.dto.interfaceInfo;
 
 
-import com.evan.evanapi.model.entity.InterfaceInfo;
 import com.google.gson.Gson;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;

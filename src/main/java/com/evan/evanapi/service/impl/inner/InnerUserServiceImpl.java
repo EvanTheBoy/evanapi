@@ -1,4 +1,4 @@
-package com.evan.evanapi.service.impl;
+package com.evan.evanapi.service.impl.inner;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.evan.evanapi.common.ErrorCode;
@@ -7,9 +7,11 @@ import com.evan.evanapi.mapper.UserMapper;
 import com.evan.evanapicommon.model.entity.User;
 import com.evan.evanapicommon.service.InnerUserService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.annotation.Resource;
 
+@DubboService
 public class InnerUserServiceImpl implements InnerUserService {
     @Resource
     private UserMapper userMapper;
