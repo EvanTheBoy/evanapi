@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import com.evan.evanapicommon.model.entity.InterfaceInfo;
 
 import java.io.Serializable;
 import java.util.Date;
