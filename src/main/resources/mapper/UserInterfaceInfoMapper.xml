@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.evan.evanapi.mapper.UserInterfaceInfoMapper">
 
-    <resultMap id="BaseResultMap" type="com.evan.evanapi.model.entity.UserInterfaceInfo">
+    <resultMap id="BaseResultMap" type="com.evan.evanapicommon.model.entity.UserInterfaceInfo">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="userId" column="userId" jdbcType="BIGINT"/>
             <result property="interfaceInfoId" column="interfaceInfoId" jdbcType="BIGINT"/>

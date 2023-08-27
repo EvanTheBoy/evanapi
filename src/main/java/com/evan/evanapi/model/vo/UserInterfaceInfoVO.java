@@ -1,6 +1,6 @@
 package com.evan.evanapi.model.vo;
 
-import com.evan.evanapi.model.entity.UserInterfaceInfo;
+import com.evan.evanapicommon.model.entity.UserInterfaceInfo;
 import com.google.gson.Gson;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
