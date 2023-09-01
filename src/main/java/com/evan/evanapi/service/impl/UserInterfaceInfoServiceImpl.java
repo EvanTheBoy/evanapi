@@ -9,9 +9,12 @@ import com.evan.evanapi.mapper.UserInterfaceInfoMapper;
 import com.evan.evanapi.service.UserInterfaceInfoService;
 import com.evan.evanapicommon.model.entity.UserInterfaceInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author EvanTheBoy
@@ -24,6 +27,9 @@ public class UserInterfaceInfoServiceImpl extends ServiceImpl<UserInterfaceInfoM
         implements UserInterfaceInfoService {
     @Resource
     private UserInterfaceInfoService userInterfaceInfoService;
+
+    @Resource
+    private RedissonClient redissonClient;
 
     @Override
     public void validUserInterfaceInfo(UserInterfaceInfo userInterfaceInfo, boolean add) {
@@ -41,13 +47,24 @@ public class UserInterfaceInfoServiceImpl extends ServiceImpl<UserInterfaceInfoM
 
     @Override
     public boolean invokeCount(long interfaceInfoId, long userId) {
+        RLock lock = redissonClient.getLock("sqlLock");
         // 判断
         ThrowUtils.throwIf(interfaceInfoId <= 0 || userId <= 0, ErrorCode.PARAMS_ERROR);
         UpdateWrapper<UserInterfaceInfo> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("interfaceInfoId", interfaceInfoId);
         updateWrapper.eq("userId", userId);
         updateWrapper.gt("leftNum", 0); // leftNum要大于0
-        updateWrapper.setSql("leftNum = leftNum - 1, totalNum = totalNum + 1");
+        try {
+            if (lock.tryLock(0, -1, TimeUnit.MILLISECONDS)) {
+                updateWrapper.setSql("leftNum = leftNum - 1, totalNum = totalNum + 1");
+            }
+        } catch (InterruptedException e) {
+            log.error("数据库设置错误:" + e.getMessage());
+        } finally {
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
+        }
         return this.update(updateWrapper);
     }
 }
