@@ -189,7 +189,7 @@ public class InterfaceInfoController {
         if (interfaceInfoInvokeRequest == null || interfaceInfoInvokeRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // 判断用户是否存在
+        // 判断接口是否存在
         long id = interfaceInfoInvokeRequest.getId();
         // 根据id从数据库中查找并校验其相关信息
         InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
