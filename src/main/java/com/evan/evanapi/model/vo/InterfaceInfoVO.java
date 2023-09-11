@@ -1,14 +1,11 @@
 package com.evan.evanapi.model.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.evan.evanapicommon.model.entity.InterfaceInfo;
 import com.google.gson.Gson;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 public class InterfaceInfoVO extends InterfaceInfo implements Serializable {
@@ -22,6 +19,11 @@ public class InterfaceInfoVO extends InterfaceInfo implements Serializable {
      * 总调用次数
      */
     private Integer totalNum;
+
+    /**
+     * 创建人信息
+     */
+    private UserVO user;
 
     /**
      * 包装类转对象
