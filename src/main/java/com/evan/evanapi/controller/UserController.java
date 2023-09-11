@@ -121,7 +121,7 @@ public class UserController {
     /**
      * 用户注销
      *
-     * @param request
+     * @param request http请求
      * @return
      */
     @PostMapping("/logout")
@@ -136,7 +136,7 @@ public class UserController {
     /**
      * 获取当前登录用户
      *
-     * @param request
+     * @param request http请求
      * @return
      */
     @GetMapping("/get/login")
@@ -152,8 +152,8 @@ public class UserController {
     /**
      * 创建用户
      *
-     * @param userAddRequest
-     * @param request
+     * @param userAddRequest 添加用户的请求
+     * @param request http请求，日后拓展用
      * @return
      */
     @PostMapping("/add")
@@ -172,8 +172,8 @@ public class UserController {
     /**
      * 删除用户
      *
-     * @param deleteRequest
-     * @param request
+     * @param deleteRequest 删除用户的请求
+     * @param request http请求，日后拓展用
      * @return
      */
     @PostMapping("/delete")
