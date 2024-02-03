@@ -5,7 +5,7 @@ import com.evan.evanapi.common.ErrorCode;
 import com.evan.evanapi.exception.BusinessException;
 import com.evan.evanapi.model.enums.UserRoleEnum;
 import com.evan.evanapi.service.UserService;
-import com.evan.evanapicommon.model.entity.User;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;

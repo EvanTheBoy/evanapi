@@ -96,7 +96,3 @@ public class PostThumbServiceImpl extends ServiceImpl<PostThumbMapper, PostThumb
     }
 
 }
-
-
-
-
